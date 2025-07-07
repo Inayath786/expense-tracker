@@ -1,0 +1,108 @@
+.dashboard-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #ccc;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.summary-box {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.summary-box p {
+  margin: 5px 0;
+}
+
+.alert-box {
+  background: #ffe0e0;
+  color: #a00000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.export-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.export-btn {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.export-btn:hover {
+  background-color: #45a049;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expense-table th,
+.expense-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.expense-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.dashboard-message {
+  color: #777;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.dashboard-message.error {
+  color: red;
+}
+.profile-container {
+  margin: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  max-width: 400px;
+}
+
+.profile-container h2 {
+  text-align: center;
+}
+
+.profile-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-container label {
+  margin-bottom: 1rem;
+}
+
+.profile-container input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
