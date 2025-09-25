@@ -38,7 +38,7 @@ const limiter=ratelimit({
 
 app.use(limiter)
 
-mongoose.connect("mongodb+srv://user454:user454@expense-tracker.ektfild.mongodb.net/?retryWrites=true&w=majority&appName=expense-tracker",{
+mongoose.connect("mongodb://127.0.0.1:27017/expenses",{
     useNewUrlParser:true
 }).then(()=>{
     console.log("Connected to mongodb")
