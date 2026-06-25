@@ -38,7 +38,7 @@ const limiter=ratelimit({
 
 app.use(limiter)
 
-mongoose.connect("mongodb+srv://user454:user454@expense-tracker.ektfild.mongodb.net/?retryWrites=true&w=majority&appName=expense-tracker",{
+mongoose.connect("mongodb://127.0.0.1:27017/expenses",{
     useNewUrlParser:true
 }).then(()=>{
     console.log("Connected to mongodb")
@@ -242,67 +242,48 @@ app.post("/expenses", async (req,res)=>{
 }
 })
 
-app.get("/user/:id", async (req,res)=>{
+
+  app.get("/user/:id", async (req,res)=>{
     try{
-    const id=req.params.id
-    const user=await User.findById(id)
+        const id=req.params.id;
+        const user=await User.findById(id);
 
-    if(!user){
-        res.status(404).json({message:"User not found"})
-        return;
-    }
-
-    let totalspend=0;
-    let reqspend=0;
-    let notreqspend=0;
-
-    user.expenses.forEach(exp => {
-        totalspend+=exp.amount
-        if(exp.category === "Required"){
-            reqspend+=exp.amount
-        }
-        else if(exp.category === "Not Required"){
-            notreqspend+=exp.amount
+        if(!user){
+            return res.status(404).json({message:"User not found"});
         }
 
-    });
+        let totalspend=0;
+        let reqspend=0;
+        let notreqspend=0;
 
-    const remaining=user.salary-totalspend
+        user.expenses.forEach(exp => {
+            totalspend+=exp.amount;
 
-    if(remaining<user.threshold){
-        console.log("Warning you are spending more than you expected")
-        
-          await sendEmail(
-    "inayatharifa@gmail.com",        // replace with user's actual email
-    "⚠️ Expense Tracker Alert",
-    `Dear ${user.name},
+            if(exp.category==="Required"){
+                reqspend+=exp.amount;
+            }
+            else if(exp.category==="Not Required"){
+                notreqspend+=exp.amount;
+            }
+        });
 
-Your remaining balance has dropped below your threshold.
+        const remaining=user.salary-totalspend;
 
-Current Balance: ${remaining}
+        res.status(200).json({
+            Name:user.name,
+            salary:user.salary,
+            threshold:user.threshold,
+            TotalSpend:totalspend,
+            "Spend on requirment":reqspend,
+            "Spend on non requirment":notreqspend,
+            Remaining:remaining
+        });
 
-Please review your expenses carefully!
-
-- Expense Tracker`
-  );
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message:err.message});
     }
-    if(remaining< 0){
-        alert("Your Earnings have been spended and no money is left now")
-    }
-    res.status(200).json({
-        "Name":user.name,
-        "salary":user.salary,
-        threshold:user.threshold,
-        "TotalSpend":totalspend,
-        "Spend on requirment":reqspend,
-        "Spend on non requirment":notreqspend,
-        "Remaining":remaining
-    })
-}catch(err){
-   res.status(500).json({message:err.message})
-}
-})
-
+});
 app.get("/expenses/:id", async (req,res)=>{
     try{
     const id=req.params.id
@@ -384,28 +365,28 @@ await user.save();
 })
 
 
-app.get("/health", async (req,res)=>{
-    try{
-        const mongostate=mongoose.connection.readyState === 1 ? "up" : "down"
+// app.get("/health", async (req,res)=>{
+//     try{
+//         const mongostate=mongoose.connection.readyState === 1 ? "up" : "down"
 
-        let redisState="down"
-        try{
-            let pong=await client.ping()
-            if(pong === "PONG"){
-                redisState="up"
-            }
-        }catch(err){
-            redisState="down"
-        }
-        res.status(200).json({
-            status:"OK",
-            "Mongodb":mongostate,
-            "redis":redisState
-        })
-    }catch(err){
-        next(err)
-    }
-})
+//         let redisState="down"
+//         try{
+//             let pong=await client.ping()
+//             if(pong === "PONG"){
+//                 redisState="up"
+//             }
+//         }catch(err){
+//             redisState="down"
+//         }
+//         res.status(200).json({
+//             status:"OK",
+//             "Mongodb":mongostate,
+//             "redis":redisState
+//         })
+//     }catch(err){
+//         next(err)
+//     }
+// })
 
 
 app.get("/test-helmet", (req, res) => {
